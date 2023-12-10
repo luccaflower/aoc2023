@@ -3,27 +3,23 @@ defmodule Aoc2023.MixProject do
 
   def project do
     [
-      app: :aoc2023,
+      apps_path: "apps",
       version: "0.1.0",
-      elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
-  def application do
-    [
-      extra_applications: [:logger]
-    ]
-  end
-
-  # Run "mix help deps" to learn about dependencies.
+  # Dependencies listed here are available only for this
+  # project and cannot be accessed from applications inside
+  # the apps folder.
+  #
+  # Run "mix help deps" for examples and options.
   defp deps do
     [
-      {:mix_test_watch, "~>1.0", only: [:dev, :test]}
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      :mix_test_watch,
+      "~>1.0",
+      only: [:test, :dev]
     ]
   end
 end
