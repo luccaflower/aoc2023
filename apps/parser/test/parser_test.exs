@@ -8,7 +8,7 @@ defmodule ParserTest do
   end
 
   test "error when no match" do
-    assert string("te") |> parse("nottest")
+    assert {:error, _} = string("te") |> parse("nottest")
   end
 
   test "parses repeating" do
@@ -54,5 +54,18 @@ defmodule ParserTest do
       |> parse("12")
 
     assert result === "2"
+  end
+
+  test "and then end error if there's anything left" do
+    assert {:error, _} = string("1") |> and_then_end() |> parse("12")
+  end
+
+  test "and then end succeeds on EOF" do
+    {:ok, result} =
+      string("1")
+      |> and_then_end()
+      |> parse("1")
+
+    assert result === "1"
   end
 end

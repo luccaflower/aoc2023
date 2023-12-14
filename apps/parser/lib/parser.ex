@@ -69,12 +69,12 @@ defmodule Parser do
 
   @spec skip_and_then(parser(), parser()) :: parser()
   def skip_and_then(one, other) do
-    fn input when is_binary(input) ->
-      case (one |> and_then(other)).(input) do
-        {:ok, {_first, second}, rest} -> {:ok, second, rest}
-        err -> err
-      end
-    end
+    and_then(one, other) |> map(fn {_first, second} -> second end)
+  end
+
+  @spec and_then_skip(parser(), parser()) :: parser()
+  def and_then_skip(one, other) do
+    and_then(one, other) |> map(fn {first, _second} -> first end)
   end
 
   @spec repeating(parser()) :: parser()
@@ -93,6 +93,16 @@ defmodule Parser do
       {:ok, match, rest} -> do_repeat(parser, rest, [match | acc])
       _ -> {acc, input}
     end
+  end
+
+  @spec and_then_end(parser()) :: parser()
+  def and_then_end(parser) do
+    end_fun = fn
+      "" -> {:ok, nil, ""}
+      _rest -> {:error, "expected EOF"}
+    end
+
+    parser |> and_then_skip(end_fun)
   end
 
   @spec parse(parser(), String.t()) :: parse_result()
