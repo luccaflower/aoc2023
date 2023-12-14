@@ -16,6 +16,16 @@ defmodule Parser do
     regex(Regex.compile!(Regex.escape(string)))
   end
 
+  @spec digit() :: parser()
+  def digit() do
+    regex(~r'\d') |> map(&String.to_integer/1)
+  end
+
+  @spec integer() :: parser()
+  def integer() do
+    regex(~r'\d+') |> map(&String.to_integer/1)
+  end
+
   @spec regex(Regex.t()) :: parser()
   def regex(pattern) do
     {:ok, regex} = Regex.compile("^" <> pattern.source)

@@ -68,4 +68,20 @@ defmodule ParserTest do
 
     assert result === "1"
   end
+
+  test "single digit" do
+    {:ok, result} =
+      digit()
+      |> parse("1")
+
+    assert result === 1
+  end
+
+  test "integer" do
+    {:ok, result} =
+      integer()
+      |> parse("123")
+
+    assert result === 123
+  end
 end
